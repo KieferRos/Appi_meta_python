@@ -1,6 +1,7 @@
-from flask import Flask,request,jsonify, render_template 
+from flask import Flask, request, jsonify, render_template 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import http.client
 import json
 
 app = Flask(__name__)
@@ -24,7 +25,7 @@ with app.app_context():
 
 #funcion para ordenar los registros por fecha y hora
 def ordenar_por_fecha_y_hora(registros):
-    return sorted(registros, key=lambda x:x.fecha_y_hora,reverse=True)
+    return sorted(registros, key=lambda x: x.fecha_y_hora,reverse=True)
 
 
 @app.route('/')
@@ -34,7 +35,7 @@ def index():
     registros_ordenados = ordenar_por_fecha_y_hora(registros)
     return render_template('index.html',registros=registros_ordenados)
 
-mensajes_log=[]
+mensajes_log= []
 
 #Funcion para agregar mensajes y guardar en la base de datos
 def agregar_mensajes_log(texto):
@@ -46,7 +47,7 @@ def agregar_mensajes_log(texto):
     db.session.commit()
 
 #token de verificacion para la configuración
-token_kiefer = "KIEFERCOD"
+TOKEN_KIEFER = "KIEFERCOD"
 
 @app.route('/webhook',methods=['GET', 'POST'])
 def webhook():
@@ -61,7 +62,7 @@ def verificar_token(req):
      token = req.args.get('hub.verify_token')
      challenge = req.args.get('hub.challenge')
 
-     if challenge and token == token_kiefer:
+     if challenge and token == TOKEN_KIEFER:
           return challenge
      else:
           return jsonify({'error': 'Token Invalido'}),401
