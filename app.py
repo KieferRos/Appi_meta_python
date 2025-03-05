@@ -35,7 +35,7 @@ def index():
     registros_ordenados = ordenar_por_fecha_y_hora(registros)
     return render_template('index.html',registros=registros_ordenados)
 
-mensajes_log= []
+mensajes_log = []
 
 #Funcion para agregar mensajes y guardar en la base de datos
 def agregar_mensajes_log(texto):
